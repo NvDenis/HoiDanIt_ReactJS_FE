@@ -1,7 +1,7 @@
 const Home = () => {
     return (
         <>
-            home
+            HOME PAGE
         </>
     )
 }
