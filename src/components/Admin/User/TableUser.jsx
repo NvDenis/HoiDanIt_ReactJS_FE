@@ -1,4 +1,13 @@
-import { Button, Col, Row, Table, Drawer, Space, Descriptions, Badge  } from "antd";
+import {
+  Button,
+  Col,
+  Row,
+  Table,
+  Drawer,
+  Space,
+  Descriptions,
+  Badge,
+} from "antd";
 import InputSearch from "./InputSearch";
 import { useEffect, useState } from "react";
 import { callFetchListUser } from "../../../services/api";
@@ -10,6 +19,7 @@ import {
   DeleteOutlined,
 } from "@ant-design/icons";
 import moment from "moment/moment";
+import ModalAddNew from "./ModalAddNew";
 
 const TableUser = () => {
   const [current, setCurrent] = useState(1);
@@ -20,7 +30,8 @@ const TableUser = () => {
   const [searchFilter, setSearchFilter] = useState("");
   const [sortField, setSortField] = useState("");
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
-  const [detailUser, setDetailUser] = useState('');
+  const [detailUser, setDetailUser] = useState("");
+  const [isShowModalAddNew, SetIsShowModalAddNew] = useState(false);
 
   useEffect(() => {
     fetchListUser();
@@ -55,7 +66,9 @@ const TableUser = () => {
     {
       title: "ID",
       dataIndex: "_id",
-      render: (text, record) => <a onClick={ () => handleViewDetail(text, record)}>{text}</a>,
+      render: (text, record) => (
+        <a onClick={() => handleViewDetail(text, record)}>{text}</a>
+      ),
     },
     {
       title: "Tên hiển thị",
@@ -115,15 +128,57 @@ const TableUser = () => {
     setSearchFilter(query);
   };
 
-
   const onClose = () => {
     setIsOpenDrawer(false);
   };
 
   const handleViewDetail = (text, record) => {
     setIsOpenDrawer(true);
-    setDetailUser(record)
-  }
+    setDetailUser(record);
+  };
+
+  const titleTable = () => {
+    return (
+      <>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <span>Table List Users</span>
+          <div>
+            <Button type="primary" style={{ margin: "0 4px" }}>
+              <ExportOutlined />
+              Export
+            </Button>
+
+            <Button type="primary" style={{ margin: "0 4px" }}>
+              <CloudUploadOutlined />
+              Import
+            </Button>
+
+            <Button
+              type="primary"
+              style={{ margin: "0 4px" }}
+              onClick={() => SetIsShowModalAddNew(true)}
+            >
+              <PlusOutlined />
+              Thêm mới
+            </Button>
+
+            <Button
+              type="ghost"
+              onClick={() => fetchListUser()}
+              style={{ margin: "0 4px" }}
+            >
+              <ReloadOutlined />
+            </Button>
+          </div>
+        </div>
+      </>
+    );
+  };
 
   return (
     <>
@@ -133,41 +188,7 @@ const TableUser = () => {
         </Col>
         <Col span={24} className="table-user" style={{ paddingTop: "24px" }}>
           <Table
-            title={() => {
-              return (
-                <>
-                  <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <p>Table List Users</p>
-                    <div>
-                      <Button type="primary" style={{ margin: "0 4px" }}>
-                        <ExportOutlined />
-                        Export
-                      </Button>
-
-                      <Button type="primary" style={{ margin: "0 4px" }}>
-                        <CloudUploadOutlined />
-                        Import
-                      </Button>
-
-                      <Button type="primary" style={{ margin: "0 4px" }}>
-                        <PlusOutlined />
-                        Thêm mới
-                      </Button>
-
-                      <Button
-                        type="ghost"
-                        onClick={() => fetchListUser()}
-                        style={{ margin: "0 4px" }}
-                      >
-                        <ReloadOutlined />
-                      </Button>
-                    </div>
-                  </div>
-                </>
-              );
-            }}
+            title={titleTable}
             loading={isLoading}
             columns={columns}
             dataSource={listUser}
@@ -178,15 +199,21 @@ const TableUser = () => {
               pageSize: pageSize,
               total: total,
               showSizeChanger: true,
+              showTotal: (total, range) => {
+                return (
+                  <>
+                    {range[0]} - {range[1]} trên {total} rows
+                  </>
+                );
+              },
             }}
           />
           ;
         </Col>
       </Row>
-
       <Drawer
         title="Detail user"
-        width={'50vw'}
+        width={"50vw"}
         placement="right"
         onClose={onClose}
         open={isOpenDrawer}
@@ -200,31 +227,36 @@ const TableUser = () => {
           </Space>
         }
       >
-        <Descriptions 
-          title="User Info" 
-          layout="vertical" 
-          bordered
-          column={2}
-        >
+        <Descriptions title="User Info" layout="vertical" bordered column={2}>
           <Descriptions.Item label="Id">{detailUser?._id}</Descriptions.Item>
-          <Descriptions.Item label="Tên hiển thị">{detailUser?.fullName}</Descriptions.Item>
-          <Descriptions.Item label="Email">{detailUser?.email}</Descriptions.Item>
-          <Descriptions.Item label="Số điện thoại">{detailUser?.phone}</Descriptions.Item>
+          <Descriptions.Item label="Tên hiển thị">
+            {detailUser?.fullName}
+          </Descriptions.Item>
+          <Descriptions.Item label="Email">
+            {detailUser?.email}
+          </Descriptions.Item>
+          <Descriptions.Item label="Số điện thoại">
+            {detailUser?.phone}
+          </Descriptions.Item>
 
-          <Descriptions.Item label="Role" span={2} >
-            <Badge status="processing" text={detailUser?.role}  />
+          <Descriptions.Item label="Role" span={2}>
+            <Badge status="processing" text={detailUser?.role} />
           </Descriptions.Item>
 
           <Descriptions.Item label="Created At">
-            {moment(detailUser?.createdAt).format('DD-MM-YYYY HH:mm:ss') }
+            {moment(detailUser?.createdAt).format("DD-MM-YYYY HH:mm:ss")}
           </Descriptions.Item>
           <Descriptions.Item label="Updated At">
-            {moment(detailUser?.updatedAt).format('DD-MM-YYYY HH:mm:ss') }
+            {moment(detailUser?.updatedAt).format("DD-MM-YYYY HH:mm:ss")}
           </Descriptions.Item>
-          
-          
         </Descriptions>
       </Drawer>
+      // Modal add new user
+      <ModalAddNew
+        isShowModalAddNew={isShowModalAddNew}
+        SetIsShowModalAddNew={SetIsShowModalAddNew}
+        fetchListUser={fetchListUser}
+      />
     </>
   );
 };
