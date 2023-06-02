@@ -8,9 +8,11 @@ import {
   notification,
 } from "antd";
 import { callCreateUser } from "../../../services/api";
+import { useState } from "react";
 
 const ModalAddNew = (props) => {
   const { isShowModalAddNew, SetIsShowModalAddNew, fetchListUser } = props;
+  const [isSubmit, setIsSubmit] = useState(false);
 
   const [form] = Form.useForm();
 
@@ -24,7 +26,7 @@ const ModalAddNew = (props) => {
 
   const onFinish = async (values) => {
     const { fullName, password, email, phonenum } = values;
-
+    setIsSubmit(true);
     const res = await callCreateUser(fullName, password, email, phonenum);
 
     if (res?.statusCode === 201) {
@@ -38,6 +40,7 @@ const ModalAddNew = (props) => {
         description: res.message,
       });
     }
+    setIsSubmit(false);
   };
 
   return (
@@ -47,6 +50,7 @@ const ModalAddNew = (props) => {
         open={isShowModalAddNew}
         onOk={handleOk}
         onCancel={handleCancel}
+        confirmLoading={isSubmit}
         footer={[
           <Button key="back" onClick={handleCancel}>
             Hủy

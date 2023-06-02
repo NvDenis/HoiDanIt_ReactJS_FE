@@ -1,13 +1,4 @@
-import {
-  Button,
-  Col,
-  Row,
-  Table,
-  Drawer,
-  Space,
-  Descriptions,
-  Badge,
-} from "antd";
+import { Button, Col, Row, Table } from "antd";
 import InputSearch from "./InputSearch";
 import { useEffect, useState } from "react";
 import { callFetchListUser } from "../../../services/api";
@@ -18,8 +9,9 @@ import {
   ReloadOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
-import moment from "moment/moment";
 import ModalAddNew from "./ModalAddNew";
+import DrawerDetailUser from "./DrawerDetailUser";
+import UserImport from "./UserImport";
 
 const TableUser = () => {
   const [current, setCurrent] = useState(1);
@@ -32,6 +24,7 @@ const TableUser = () => {
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [detailUser, setDetailUser] = useState("");
   const [isShowModalAddNew, SetIsShowModalAddNew] = useState(false);
+  const [isModalImportOpen, setIsModalImportOpen] = useState(false);
 
   useEffect(() => {
     fetchListUser();
@@ -153,7 +146,11 @@ const TableUser = () => {
               Export
             </Button>
 
-            <Button type="primary" style={{ margin: "0 4px" }}>
+            <Button
+              type="primary"
+              style={{ margin: "0 4px" }}
+              onClick={() => setIsModalImportOpen(true)}
+            >
               <CloudUploadOutlined />
               Import
             </Button>
@@ -211,51 +208,23 @@ const TableUser = () => {
           ;
         </Col>
       </Row>
-      <Drawer
-        title="Detail user"
-        width={"50vw"}
-        placement="right"
+      // drawer detail user
+      <DrawerDetailUser
         onClose={onClose}
-        open={isOpenDrawer}
-        size={"large"}
-        extra={
-          <Space>
-            <Button onClick={onClose}>Cancel</Button>
-            <Button type="primary" onClick={onClose}>
-              OK
-            </Button>
-          </Space>
-        }
-      >
-        <Descriptions title="User Info" layout="vertical" bordered column={2}>
-          <Descriptions.Item label="Id">{detailUser?._id}</Descriptions.Item>
-          <Descriptions.Item label="Tên hiển thị">
-            {detailUser?.fullName}
-          </Descriptions.Item>
-          <Descriptions.Item label="Email">
-            {detailUser?.email}
-          </Descriptions.Item>
-          <Descriptions.Item label="Số điện thoại">
-            {detailUser?.phone}
-          </Descriptions.Item>
-
-          <Descriptions.Item label="Role" span={2}>
-            <Badge status="processing" text={detailUser?.role} />
-          </Descriptions.Item>
-
-          <Descriptions.Item label="Created At">
-            {moment(detailUser?.createdAt).format("DD-MM-YYYY HH:mm:ss")}
-          </Descriptions.Item>
-          <Descriptions.Item label="Updated At">
-            {moment(detailUser?.updatedAt).format("DD-MM-YYYY HH:mm:ss")}
-          </Descriptions.Item>
-        </Descriptions>
-      </Drawer>
+        isOpenDrawer={isOpenDrawer}
+        handleViewDetail={handleViewDetail}
+        detailUser={detailUser}
+      />
       // Modal add new user
       <ModalAddNew
         isShowModalAddNew={isShowModalAddNew}
         SetIsShowModalAddNew={SetIsShowModalAddNew}
         fetchListUser={fetchListUser}
+      />
+      // User Import
+      <UserImport
+        isModalImportOpen={isModalImportOpen}
+        setIsModalImportOpen={setIsModalImportOpen}
       />
     </>
   );
