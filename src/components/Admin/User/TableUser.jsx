@@ -208,20 +208,20 @@ const TableUser = () => {
           ;
         </Col>
       </Row>
-      // drawer detail user
+      {/* // drawer detail user */}
       <DrawerDetailUser
         onClose={onClose}
         isOpenDrawer={isOpenDrawer}
         handleViewDetail={handleViewDetail}
         detailUser={detailUser}
       />
-      // Modal add new user
+      {/* // Modal add new user */}
       <ModalAddNew
         isShowModalAddNew={isShowModalAddNew}
         SetIsShowModalAddNew={SetIsShowModalAddNew}
         fetchListUser={fetchListUser}
       />
-      // User Import
+      {/* // User Import */}
       <UserImport
         isModalImportOpen={isModalImportOpen}
         setIsModalImportOpen={setIsModalImportOpen}

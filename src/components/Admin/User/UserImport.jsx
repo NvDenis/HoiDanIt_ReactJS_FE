@@ -1,9 +1,12 @@
 import { Modal, message, Upload, Table } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
+import * as XLSX from "xlsx";
+import { useState } from "react";
 
 const { Dragger } = Upload;
 const UserImport = (props) => {
   const { isModalImportOpen, setIsModalImportOpen } = props;
+  const [dataImport, setDataImport] = useState("");
 
   const dummyRequest = async ({ file, onSuccess }) => {
     setTimeout(() => {
@@ -22,10 +25,32 @@ const UserImport = (props) => {
     onChange(info) {
       const { status } = info.file;
       if (status !== "uploading") {
-        console.log(info.file, info.fileList);
+        // console.log(info.file, info.fileList);
       }
       if (status === "done") {
         message.success(`${info.file.name} file uploaded successfully.`);
+
+        let reader = new FileReader();
+
+        reader.onload = function (e) {
+          let data = new Uint8Array(e.target.result);
+          let workbook = XLSX.read(data, { type: "array" });
+          // find the name of your sheet in the workbook first
+          let worksheet = workbook.Sheets["Sheet1"];
+
+          // convert to json format
+          let jsonData = XLSX.utils.sheet_to_json(worksheet, {
+            header: ["fullName", "email", "phone"],
+            range: 1,
+          });
+
+          jsonData = jsonData.map((item, index) => ({
+            ...item,
+            key: index.toString(), // Thêm thuộc tính key với giá trị duy nhất
+          }));
+          if (jsonData) setDataImport(jsonData);
+        };
+        reader.readAsArrayBuffer(info.file.originFileObj);
       } else if (status === "error") {
         message.error(`${info.file.name} file upload failed.`);
       }
@@ -45,6 +70,9 @@ const UserImport = (props) => {
         okText={"Import data"}
         width={"50vw"}
         maskClosable={false}
+        okButtonProps={{
+          disabled: true,
+        }}
       >
         <Dragger {...UploadProps}>
           <p className="ant-upload-drag-icon">
@@ -75,6 +103,7 @@ const UserImport = (props) => {
                 dataIndex: "phone",
               },
             ]}
+            dataSource={dataImport}
           />
         </div>
       </Modal>
