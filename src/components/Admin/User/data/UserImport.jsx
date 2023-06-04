@@ -2,7 +2,8 @@ import { Modal, message, Upload, Table, notification } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import * as XLSX from "xlsx";
 import { useState } from "react";
-import { callCreateListUsers } from "../../../services/api";
+import { callCreateListUsers } from "../../../../services/api";
+import sampleFile from "./testImport.xlsx?url";
 
 const { Dragger } = Upload;
 const UserImport = (props) => {
@@ -114,6 +115,10 @@ const UserImport = (props) => {
           <p className="ant-upload-hint">
             Support for a single upload. Only accept .csv .xls .xlsx.
           </p>
+
+          <a onClick={(e) => e.stopPropagation()} href={sampleFile} download>
+            Sample file
+          </a>
         </Dragger>
 
         <div style={{ padding: "20px 0" }}>

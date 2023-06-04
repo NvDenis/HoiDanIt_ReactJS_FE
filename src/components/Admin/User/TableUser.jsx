@@ -11,7 +11,8 @@ import {
 } from "@ant-design/icons";
 import ModalAddNew from "./ModalAddNew";
 import DrawerDetailUser from "./DrawerDetailUser";
-import UserImport from "./UserImport";
+import UserImport from "./data/UserImport";
+import * as XLSX from "xlsx";
 
 const TableUser = () => {
   const [current, setCurrent] = useState(1);
@@ -25,6 +26,8 @@ const TableUser = () => {
   const [detailUser, setDetailUser] = useState("");
   const [isShowModalAddNew, SetIsShowModalAddNew] = useState(false);
   const [isModalImportOpen, setIsModalImportOpen] = useState(false);
+
+  console.log("check listUser", listUser);
 
   useEffect(() => {
     fetchListUser();
@@ -130,6 +133,31 @@ const TableUser = () => {
     setDetailUser(record);
   };
 
+  const handeExport = () => {
+    const workbook = XLSX.utils.book_new();
+    let dataMatrix = listUser.map((user) => [
+      user._id,
+      user.fullName,
+      user.email,
+      user.phone,
+      user.updatedAt,
+      user.createdAt,
+    ]);
+
+    dataMatrix.unshift([
+      "ID",
+      "Tên hiển thị",
+      "Email",
+      "Số điện thoại",
+      "Ngày cập nhật",
+      "Ngày tạo",
+    ]);
+
+    const worksheet = XLSX.utils.aoa_to_sheet(dataMatrix);
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    XLSX.writeFile(workbook, "myfile.xlsx");
+  };
+
   const titleTable = () => {
     return (
       <>
@@ -141,7 +169,11 @@ const TableUser = () => {
         >
           <span>Table List Users</span>
           <div>
-            <Button type="primary" style={{ margin: "0 4px" }}>
+            <Button
+              type="primary"
+              style={{ margin: "0 4px" }}
+              onClick={() => handeExport()}
+            >
               <ExportOutlined />
               Export
             </Button>
