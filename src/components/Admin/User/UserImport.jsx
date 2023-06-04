@@ -1,12 +1,13 @@
-import { Modal, message, Upload, Table } from "antd";
+import { Modal, message, Upload, Table, notification } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import * as XLSX from "xlsx";
 import { useState } from "react";
+import { callCreateListUsers } from "../../../services/api";
 
 const { Dragger } = Upload;
 const UserImport = (props) => {
   const { isModalImportOpen, setIsModalImportOpen } = props;
-  const [dataImport, setDataImport] = useState("");
+  let [dataImport, setDataImport] = useState([]);
 
   const dummyRequest = async ({ file, onSuccess }) => {
     setTimeout(() => {
@@ -21,6 +22,7 @@ const UserImport = (props) => {
     // action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
     accept:
       ".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
+
     customRequest: dummyRequest,
     onChange(info) {
       const { status } = info.file;
@@ -29,7 +31,6 @@ const UserImport = (props) => {
       }
       if (status === "done") {
         message.success(`${info.file.name} file uploaded successfully.`);
-
         let reader = new FileReader();
 
         reader.onload = function (e) {
@@ -60,18 +61,47 @@ const UserImport = (props) => {
     },
   };
 
+  const handleSubmit = async () => {
+    const data = dataImport.map((item, index) => {
+      const { key, ...rest } = item;
+      return { ...rest, password: "123456" };
+    });
+    const res = await callCreateListUsers(data);
+
+    if (res?.data) {
+      notification.success({
+        message: "Upload thành công",
+        description:
+          "Success: " +
+          res.data.countSuccess +
+          " Error: " +
+          res.data.countError,
+      });
+      setIsModalImportOpen(false);
+      setDataImport([]);
+    } else {
+      notification.error({
+        message: res.message,
+      });
+    }
+  };
+
   return (
     <>
       <Modal
         title="Import data user"
         open={isModalImportOpen}
-        onOk={() => setIsModalImportOpen(false)}
-        onCancel={() => setIsModalImportOpen(false)}
+        destroyOnClose={true}
+        onOk={() => handleSubmit()}
+        onCancel={() => {
+          setIsModalImportOpen(false);
+          setDataImport([]);
+        }}
         okText={"Import data"}
         width={"50vw"}
         maskClosable={false}
         okButtonProps={{
-          disabled: true,
+          disabled: dataImport.length < 1,
         }}
       >
         <Dragger {...UploadProps}>
