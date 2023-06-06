@@ -1,7 +1,7 @@
 import { Button, Col, Input } from "antd";
 import { useState } from "react";
 
-const InputSearch = ({ fetchListUser }) => {
+const InputSearch = ({ handleSearch }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -19,15 +19,15 @@ const InputSearch = ({ fetchListUser }) => {
     }
 
     if (params) {
-      fetchListUser(params);
+      handleSearch(params);
     }
   };
 
   const handleSearchClear = () => {
-    setName('');
-    setEmail('');
-    setPhone('');
-  }
+    setName("");
+    setEmail("");
+    setPhone("");
+  };
 
   return (
     <>
@@ -69,7 +69,7 @@ const InputSearch = ({ fetchListUser }) => {
           >
             Search
           </Button>
-          <Button  onClick={handleSearchClear}>Clear</Button>
+          <Button onClick={handleSearchClear}>Clear</Button>
         </div>
       </div>
     </>

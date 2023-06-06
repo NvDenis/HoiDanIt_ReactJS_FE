@@ -1,18 +1,28 @@
-import { Button, Col, Row, Table } from "antd";
+import {
+  Button,
+  Col,
+  Popconfirm,
+  Row,
+  Table,
+  message,
+  notification,
+} from "antd";
 import InputSearch from "./InputSearch";
 import { useEffect, useState } from "react";
-import { callFetchListUser } from "../../../services/api";
+import { callDeleteUser, callFetchListUser } from "../../../services/api";
 import {
   ExportOutlined,
   PlusOutlined,
   CloudUploadOutlined,
   ReloadOutlined,
   DeleteOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
 import ModalAddNew from "./ModalAddNew";
 import DrawerDetailUser from "./DrawerDetailUser";
 import UserImport from "./data/UserImport";
 import * as XLSX from "xlsx";
+import ModalUpdate from "./ModalUpdate";
 
 const TableUser = () => {
   const [current, setCurrent] = useState(1);
@@ -24,10 +34,10 @@ const TableUser = () => {
   const [sortField, setSortField] = useState("");
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [detailUser, setDetailUser] = useState("");
+  const [dataUpdate, setDataUpdate] = useState("");
   const [isShowModalAddNew, SetIsShowModalAddNew] = useState(false);
   const [isModalImportOpen, setIsModalImportOpen] = useState(false);
-
-  console.log("check listUser", listUser);
+  const [isShowModalUpdate, setIsShowModalUpdate] = useState(false);
 
   useEffect(() => {
     fetchListUser();
@@ -92,12 +102,45 @@ const TableUser = () => {
       render: function (text, record, index) {
         return (
           <>
-            <DeleteOutlined style={{ color: "red", cursor: "pointer" }} />
+            <Popconfirm
+              title="Xác nhận xóa người dùng"
+              placement="leftTop"
+              description="Bạn có chắc chắn muốn xóa user này"
+              onConfirm={() => handleDeleteUser(record._id)}
+              okText="Xác nhận"
+              cancelText="Hủy"
+            >
+              <DeleteOutlined style={{ color: "red", cursor: "pointer" }} />
+            </Popconfirm>
+            &nbsp; &nbsp; &nbsp;
+            <EditOutlined
+              style={{ color: "#facf14", cursor: "pointer" }}
+              onClick={() => handleEditUser(record)}
+            />
           </>
         );
       },
     },
   ];
+
+  const handleDeleteUser = async (_id) => {
+    let res = await callDeleteUser(_id);
+
+    if (res?.data) {
+      message.success("Xóa người dùng thành công!");
+      await fetchListUser();
+    } else {
+      notification.error({
+        title: "Có lỗi xảy ra!",
+        message: res.message,
+      });
+    }
+  };
+
+  const handleEditUser = (record) => {
+    setIsShowModalUpdate(true);
+    setDataUpdate(record);
+  };
 
   const onChange = (pagination, filters, sorter, extra) => {
     if (pagination && pagination.pageSize !== pageSize) {
@@ -116,8 +159,6 @@ const TableUser = () => {
           : `&sort=${sorter.field}`;
       setSortField(q);
     }
-
-    console.log("check sorter >>>", sorter);
   };
 
   const handleSearch = (query) => {
@@ -198,7 +239,7 @@ const TableUser = () => {
 
             <Button
               type="ghost"
-              onClick={() => fetchListUser()}
+              onClick={() => setSearchFilter("")}
               style={{ margin: "0 4px" }}
             >
               <ReloadOutlined />
@@ -257,6 +298,14 @@ const TableUser = () => {
       <UserImport
         isModalImportOpen={isModalImportOpen}
         setIsModalImportOpen={setIsModalImportOpen}
+      />
+
+      {/* Modal Update  */}
+      <ModalUpdate
+        isShowModalUpdate={isShowModalUpdate}
+        setIsShowModalUpdate={setIsShowModalUpdate}
+        fetchListUser={fetchListUser}
+        dataUpdate={dataUpdate}
       />
     </>
   );
