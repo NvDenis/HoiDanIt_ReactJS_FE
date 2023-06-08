@@ -3,7 +3,7 @@ import moment from "moment/moment";
 
 const DrawerDetailUser = (props) => {
   const { onClose, isOpenDrawer, detailUser } = props;
-
+                                      
   return (
     <>
       <Drawer

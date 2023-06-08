@@ -23,11 +23,12 @@ import DrawerDetailUser from "./DrawerDetailUser";
 import UserImport from "./data/UserImport";
 import * as XLSX from "xlsx";
 import ModalUpdate from "./ModalUpdate";
+import moment from "moment/moment";
 
 const TableUser = () => {
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState(5);
-  const [listUser, setListUser] = useState([]);
+  let [listUser, setListUser] = useState([]);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [searchFilter, setSearchFilter] = useState("");
@@ -38,6 +39,13 @@ const TableUser = () => {
   const [isShowModalAddNew, SetIsShowModalAddNew] = useState(false);
   const [isModalImportOpen, setIsModalImportOpen] = useState(false);
   const [isShowModalUpdate, setIsShowModalUpdate] = useState(false);
+
+  listUser = listUser.map((item) => {
+    return {
+      ...item,
+      updatedAt: moment(item.updatedAt).format("DD-MM-YYYY HH:mm:ss"),
+    };
+  });
 
   useEffect(() => {
     fetchListUser();
@@ -97,6 +105,14 @@ const TableUser = () => {
         compare: (a, b) => a.english - b.english,
       },
     },
+    {
+      title: "Ngày cập nhật",
+      dataIndex: "updatedAt",
+      sorter: {
+        compare: (a, b) => a.english - b.english,
+      },
+    },
+
     {
       title: "Action",
       render: function (text, record, index) {
