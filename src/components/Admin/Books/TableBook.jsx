@@ -1,4 +1,12 @@
-import { Button, Col, Popconfirm, Row, Table } from "antd";
+import {
+  Button,
+  Col,
+  Popconfirm,
+  Row,
+  Table,
+  message,
+  notification,
+} from "antd";
 import InputSearch from "./InputSearch";
 import {
   ExportOutlined,
@@ -9,8 +17,11 @@ import {
   EditOutlined,
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { callGetListBook } from "../../../services/api";
+import { callDeleteBook, callGetListBook } from "../../../services/api";
 import moment from "moment";
+import DrawerViewDetail from "./DrawerViewDetail";
+import BookAddNew from "./BookAddNew";
+import BookUpdate from "./BookUpdate";
 
 const TableBook = () => {
   let [listBook, setListBook] = useState([]);
@@ -21,11 +32,18 @@ const TableBook = () => {
   // const [sortField, setSortField] = useState("&sort=-updateAt");
   const [sortField, setSortField] = useState("");
   const [dataFilter, setDataFilter] = useState("");
+  const [isShowDrawerDetail, setIsShowDrawerDetail] = useState(false);
+  const [dataDetail, setDataDetail] = useState("");
+  const [dataEdit, setDataEdit] = useState("");
+  const [isShowModalAddNew, setIsShowModalAddNew] = useState(false);
+  const [isShowModalUpdate, setIsShowModalUpdate] = useState(false);
+
   listBook = listBook.map((item) => {
     return {
       ...item,
       key: item._id,
       updatedAt: moment(item.updatedAt).format("DD-MM-YYYY HH:mm:ss"),
+      createdAt: moment(item.createdAt).format("DD-MM-YYYY HH:mm:ss"),
     };
   });
 
@@ -33,7 +51,9 @@ const TableBook = () => {
     {
       title: "ID",
       dataIndex: "_id",
-      render: (text, record) => <a>{text}</a>,
+      render: (text, record) => (
+        <a onClick={() => handleViewDetail(record)}>{text}</a>
+      ),
     },
     {
       title: "Tên sách",
@@ -82,10 +102,10 @@ const TableBook = () => {
       render: (text, record) => (
         <>
           <Popconfirm
-            title="Xác nhận xóa người dùng"
+            title="Confirm book deletion"
             placement="leftTop"
-            description="Bạn có chắc chắn muốn xóa user này"
-            onConfirm={() => handleDeleteUser(record._id)}
+            description="Do you confirm the deletion of this book?"
+            onConfirm={() => handleDeleteBook(record._id)}
             okText="Xác nhận"
             cancelText="Hủy"
           >
@@ -94,12 +114,32 @@ const TableBook = () => {
           &nbsp; &nbsp; &nbsp;
           <EditOutlined
             style={{ color: "#facf14", cursor: "pointer" }}
-            onClick={() => handleEditUser(record)}
+            onClick={() => {
+              setIsShowModalUpdate(true);
+              setDataEdit(record);
+            }}
           />
         </>
       ),
     },
   ];
+
+  const handleDeleteBook = async (id) => {
+    let res = await callDeleteBook(id);
+    if (res?.data) {
+      message.success("deleted book sucessfully!");
+      await getListBook();
+    } else {
+      notification.error({
+        message: "An error!",
+        description: res.message,
+      });
+    }
+  };
+  const handleViewDetail = (record) => {
+    setIsShowDrawerDetail(true);
+    setDataDetail(record);
+  };
 
   useEffect(() => {
     getListBook();
@@ -168,7 +208,7 @@ const TableBook = () => {
               <CloudUploadOutlined />
               Import
             </Button>
-            <Button type="primary">
+            <Button type="primary" onClick={() => setIsShowModalAddNew(true)}>
               <PlusOutlined />
               Thêm mới
             </Button>
@@ -212,6 +252,27 @@ const TableBook = () => {
           />
         </Col>
       </Row>
+
+      {/* drawer view detail */}
+      <DrawerViewDetail
+        isShowDrawerDetail={isShowDrawerDetail}
+        setIsShowDrawerDetail={setIsShowDrawerDetail}
+        dataDetail={dataDetail}
+      />
+
+      <BookAddNew
+        isShowModalAddNew={isShowModalAddNew}
+        setIsShowModalAddNew={setIsShowModalAddNew}
+        getListBook={getListBook}
+      />
+
+      <BookUpdate
+        isShowModalUpdate={isShowModalUpdate}
+        setIsShowModalUpdate={setIsShowModalUpdate}
+        getListBook={getListBook}
+        dataEdit={dataEdit}
+        setDataEdit={setDataEdit}
+      />
     </>
   );
 };

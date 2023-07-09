@@ -1,0 +1,104 @@
+@import "react-image-gallery/styles/scss/image-gallery.scss";
+
+.view-detail-book {
+    background-color: #fff;
+    padding         : 20px;
+
+    .title {
+        font-size: 30px;
+    }
+
+    .quantity {
+        display    : flex;
+        align-items: center;
+        gap        : 20px;
+
+
+        .right-side {
+            display    : flex;
+            align-items: center;
+
+            input {
+                width             : 50px;
+                height            : 32px;
+                border-left       : 0;
+                border-right      : 0;
+                font-size         : 16px;
+                font-weight       : 400;
+                box-sizing        : border-box;
+                cursor            : text;
+                border-radius     : 0;
+                -webkit-appearance: none;
+                border            : 1px solid rgba(0, 0, 0, .09);
+                text-align        : center;
+                appearance        : none;
+                -moz-appearance   : textfield;
+            }
+
+            button {
+                font-size: 16px;
+                height   : 32px;
+                width    : 32px;
+                border   : 1px solid rgba(0, 0, 0, .09);
+                cursor   : pointer;
+            }
+        }
+    }
+
+    .price {
+        padding   : 15px 20px;
+        background: #fafafa;
+
+        .currency {
+            font-weight: 500;
+            color      : #ee4d2d;
+            font-size  : 30px;
+        }
+    }
+
+    .btn {
+
+        .btn-left {
+            background: #ff57221a;
+            color     : rgb(238 77 45);
+            border    : 1px solid rgb(238 77 45);
+            height    : 48px;
+            padding   : 0 20px;
+            cursor    : pointer;
+
+            svg {
+                margin-right: 10px;
+                color       : rgb(238 77 45);
+                stroke      : rgb(238 77 45);
+                display     : inline-block;
+                width       : 16px;
+                height      : 16px;
+                fill        : currentColor;
+                position    : relative;
+
+            }
+
+            &:hover {
+                background: #ffc5b22e;
+            }
+        }
+
+        .btn-right {
+            color     : #fff;
+            border    : 1px solid rgb(238 77 45);
+            background: rgb(238 77 45);
+            height    : 48px;
+            padding   : 0 20px;
+            cursor    : pointer;
+
+            &:hover {
+                background: #f05d40;
+            }
+        }
+    }
+
+}
+
+.active {
+    outline: 2px solid rgb(238 77 45);
+}
