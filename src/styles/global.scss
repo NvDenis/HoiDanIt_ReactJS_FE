@@ -1,0 +1,39 @@
+.popover-list {
+    .popover-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        .popover-left {
+
+            max-width  : 550px;
+            display    : flex;
+            gap        : 5px;
+            display    : flex;
+            align-items: center;
+
+            padding-block: 10px;
+
+            .popover-img {
+                width      : 60px;
+                height     : 60px;
+                display    : flex;
+                align-items: center;
+
+                .img {
+                    width : 100%;
+                    height: auto;
+                }
+            }
+
+            .popover-maintext {
+                max-width: 480px;
+            }
+        }
+
+
+        .popover-price {
+            color: rgb(238, 77, 45);
+        }
+    }
+}

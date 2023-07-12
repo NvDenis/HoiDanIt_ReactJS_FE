@@ -6,22 +6,39 @@ import ModalGallery from "./ModalGallery";
 import { useState } from "react";
 import { useRef } from "react";
 import BookLoader from "./BookLoader";
+import { doAddBookAction } from "../../redux/order/orderSlice";
+import { useDispatch } from "react-redux";
 
 const ViewDetail = (props) => {
   const refGallery = useRef(null);
   const [isShowModalGallery, setIsShowModalGallery] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const dispatch = useDispatch();
+
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const { dataBook } = props;
 
-  console.log("check data book view", dataBook);
-
   const images = dataBook?.images ?? [];
+  console.log('check databook', dataBook);
 
   const handleOnclickImage = () => {
     setIsShowModalGallery(true);
     setCurrentIndex(refGallery?.current?.getCurrentIndex() ?? 0);
+  };
+
+  const handleQuantityChange = (event) => {
+    const newQuantity = parseInt(event.target.value);
+    if (!isNaN(newQuantity) && newQuantity <= dataBook.quantity) {
+      setQuantity(newQuantity);
+    }
+  };
+
+  const handleAddToCart = (quantity, dataBook) => {
+    dispatch(
+      doAddBookAction({ quantity, detail: dataBook, _id: dataBook._id })
+    );
   };
 
   return (
@@ -93,19 +110,34 @@ const ViewDetail = (props) => {
                   <span className="left-side">Số lượng</span>
                   <span className="right-side">
                     <button>
-                      {" "}
-                      <MinusOutlined />
+                      <MinusOutlined
+                        onClick={() => {
+                          if (quantity > 1)
+                            setQuantity((quantity) => quantity - 1);
+                        }}
+                      />
                     </button>
-                    <input defaultValue={1} type="text" />
+                    <input
+                      type="text"
+                      value={quantity}
+                      onChange={handleQuantityChange}
+                    />
                     <button>
-                      {" "}
-                      <PlusOutlined />
+                      <PlusOutlined
+                        onClick={() => {
+                          if (quantity < dataBook.quantity)
+                            setQuantity((quantity) => quantity + 1);
+                        }}
+                      />
                     </button>
                   </span>
                 </div>
 
                 <div className="btn" style={{ display: "flex", gap: "20px" }}>
-                  <button className="btn-left">
+                  <button
+                    className="btn-left"
+                    onClick={() => handleAddToCart(quantity, dataBook)}
+                  >
                     <svg
                       enableBackground="new 0 0 15 15"
                       viewBox="0 0 15 15"

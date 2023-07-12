@@ -14,25 +14,18 @@ const initialState = {
 };
 
 
-export const accountSlide = createSlice({
+export const accountSlice = createSlice({
     name: 'account',
     initialState,
-    // The `reducers` field lets us define reducers and generate associated actions
     reducers: {
         doLoginAction: (state, action) => {
-            // Redux Toolkit allows us to write "mutating" logic in reducers. It
-            // doesn't actually mutate the state because it uses the Immer library,
-            // which detects changes to a "draft state" and produces a brand new
-            // immutable state based off those changes
+
             state.isAuthenticated = true;
             state.isLoading = false;
             state.user = action.payload;
         },
         doGetAccountAction: (state, action) => {
-            // Redux Toolkit allows us to write "mutating" logic in reducers. It
-            // doesn't actually mutate the state because it uses the Immer library,
-            // which detects changes to a "draft state" and produces a brand new
-            // immutable state based off those changes
+
             state.isAuthenticated = true;
             state.isLoading = false;
             state.user = action.payload.user;
@@ -58,7 +51,7 @@ export const accountSlide = createSlice({
     },
 });
 
-export const { doLoginAction, doGetAccountAction, doLogoutAction } = accountSlide.actions;
+export const { doLoginAction, doGetAccountAction, doLogoutAction } = accountSlice.actions;
 
 
-export default accountSlide.reducer;
+export default accountSlice.reducer;

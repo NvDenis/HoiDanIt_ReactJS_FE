@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaReact } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import { VscSearchFuzzy } from "react-icons/vsc";
-import { Divider, Badge, Drawer, message, Avatar } from "antd";
+import { Divider, Badge, Drawer, message, Avatar, Popover } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { DownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
@@ -18,6 +18,10 @@ const Header = () => {
   const user = useSelector((state) => state.account.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const cartsQuantity = useSelector((state) => state.order.carts.length);
+  const carts = useSelector((state) => state.order.carts);
+
+  console.log("check carsDetail", carts);
 
   const handleLogout = async () => {
     const res = await callLogout();
@@ -54,6 +58,37 @@ const Header = () => {
     user?.avatar
   }`;
 
+  const renderContent = () => {
+    return (
+      <div className="popover-list">
+        {carts &&
+          carts.map((item) => {
+            return (
+              <div className="popover-item" key={`item-${item._id}`}>
+                <div className="popover-left">
+                  <div className="popover-img">
+                    <img
+                      className="img"
+                      src={`${import.meta.env.VITE_BACKEND_URL}/images/book/${
+                        item.detail.thumbnail
+                      }`}
+                      alt=""
+                    />
+                  </div>
+                  <p className="popover-maintext">{item.detail.mainText}</p>
+                </div>
+
+                <p className="popover-price">{new Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format(item.detail.price)}</p>
+              </div>
+            );
+          })}
+      </div>
+    );
+  };
+
   return (
     <>
       <div className="header-container">
@@ -83,9 +118,15 @@ const Header = () => {
           <nav className="page-header__bottom">
             <ul id="navigation" className="navigation">
               <li className="navigation__item">
-                <Badge count={5} size={"small"}>
-                  <FiShoppingCart className="icon-cart" />
-                </Badge>
+                <Popover
+                  title={"Sản phẩm mới thêm"}
+                  content={renderContent}
+                  placement="bottomRight"
+                >
+                  <Badge count={cartsQuantity} showZero size={"small"}>
+                    <FiShoppingCart className="icon-cart" />
+                  </Badge>
+                </Popover>
               </li>
               <li className="navigation__item mobile">
                 <Divider type="vertical" />
