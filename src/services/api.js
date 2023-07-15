@@ -84,3 +84,33 @@ export const callDeleteBook = (id) => {
 export const callFecthDetailBookById = (id) => {
     return axios.get(`api/v1/book/${id}`)
 }
+
+export const callCreateOrder = (name, address, phone, totalPrice, detail) => {
+    return axios.post(`api/v1/order`, { name, address, phone, totalPrice, detail })
+}
+
+export const callGetHistoryOrder = () => {
+    return axios.get(`/api/v1/history`)
+}
+
+export const callUpdateAvatar = (fileImg) => {
+    const bodyFormData = new FormData();
+    bodyFormData.append('fileImg', fileImg);
+    return axios({
+        method: 'post',
+        url: '/api/v1/file/upload',
+        data: bodyFormData,
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Upload-type': 'avatar'
+        }
+    })
+}
+
+export const callUpdateUserInfo = (_id, fullName, phone, avatar) => {
+    return axios.put(`api/v1/user`, { _id, fullName, phone, avatar })
+}
+
+export const callChangPassword = (email, oldpass, newpass) => {
+    return axios.post('api/v1/user/change-password', { email, oldpass, newpass })
+}

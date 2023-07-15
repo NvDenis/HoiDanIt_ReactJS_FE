@@ -11,6 +11,8 @@ import { callLogout } from "../../services/api";
 import "./header.scss";
 import { doLogoutAction } from "../../redux/account/accountSlice";
 import { Link } from "react-router-dom";
+import UserInfo from "../ModalManageAccount/UserInfo";
+import ManageAccount from "../ModalManageAccount/ManageAccount";
 
 const Header = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -20,8 +22,8 @@ const Header = () => {
   const dispatch = useDispatch();
   const cartsQuantity = useSelector((state) => state.order.carts.length);
   const carts = useSelector((state) => state.order.carts);
-
-  console.log("check carsDetail", carts);
+  const [isShowModalManageAccount, setIsShowModalManageAccount] =
+    useState(false);
 
   const handleLogout = async () => {
     const res = await callLogout();
@@ -34,8 +36,26 @@ const Header = () => {
 
   let items = [
     {
-      label: <label style={{ cursor: "pointer" }}>Quản lý tài khoản</label>,
+      label: (
+        <label
+          style={{ cursor: "pointer" }}
+          onClick={() => setIsShowModalManageAccount(true)}
+        >
+          Quản lý tài khoản
+        </label>
+      ),
       key: "account",
+    },
+    {
+      label: (
+        <label
+          style={{ cursor: "pointer" }}
+          onClick={() => navigate("/history")}
+        >
+          Lịch sử mua hàng
+        </label>
+      ),
+      key: "history",
     },
     {
       label: (
@@ -78,13 +98,27 @@ const Header = () => {
                   <p className="popover-maintext">{item.detail.mainText}</p>
                 </div>
 
-                <p className="popover-price">{new Intl.NumberFormat("vi-VN", {
-                      style: "currency",
-                      currency: "VND",
-                    }).format(item.detail.price)}</p>
+                <p className="popover-price">
+                  {new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(item.detail.price)}
+                </p>
               </div>
             );
           })}
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <div></div>
+          <button className="btnPreviewCarts" onClick={() => navigate("order")}>
+            Xem giỏ hàng
+          </button>
+        </div>
       </div>
     );
   };
@@ -159,6 +193,11 @@ const Header = () => {
         <p>Đăng xuất</p>
         <Divider />
       </Drawer>
+
+      <ManageAccount
+        isShowModalManageAccount={isShowModalManageAccount}
+        setIsShowModalManageAccount={setIsShowModalManageAccount}
+      />
     </>
   );
 };

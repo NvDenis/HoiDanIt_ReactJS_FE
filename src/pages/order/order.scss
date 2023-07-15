@@ -1,0 +1,191 @@
+.order-container {
+    padding         : 20px 40px;
+    background-color: #efefef;
+    min-height      : calc(100vh - 150px);
+
+    .order-top {
+        background-color: #fff;
+        padding         : 20px;
+        margin-bottom   : 20px;
+        border-radius   : 5px;
+
+    }
+
+    .order-body {
+
+        display        : flex;
+        justify-content: space-between;
+
+        .order-left {
+            width         : 65%;
+            display       : flex;
+            flex-direction: column;
+            gap           : 15px;
+
+
+            .orderLeft-item {
+                display         : flex;
+                background-color: #fff;
+                padding         : 20px;
+                justify-content : space-between;
+                align-items     : center;
+                border-radius   : 5px;
+
+
+                .order-info {
+                    display        : flex;
+                    justify-content: space-between;
+                    align-items    : center;
+                    gap            : 10px;
+
+                    .order-img {
+                        width      : 100px;
+                        height     : 100px;
+                        display    : flex;
+                        align-items: center;
+
+                        .img {
+                            width: 100%;
+                        }
+                    }
+
+                    .order-maintext {
+                        width: 300px;
+                    }
+
+                    .order-price {}
+
+                    .order-quantity {
+                        width: 100px;
+                    }
+                }
+
+                .order-total {}
+
+                .order-delete {}
+            }
+        }
+
+        .order-right {
+            width           : 30%;
+            background-color: #fff;
+            border-radius   : 5px;
+            padding         : 20px;
+
+            .provisional {
+                display        : flex;
+                justify-content: space-between;
+            }
+
+            .total-cost {
+                display        : flex;
+                justify-content: space-between;
+            }
+
+            .btnBuyItem {
+                width        : 100%;
+                border-radius: 5px;
+            }
+
+        }
+    }
+}
+
+@media (max-width: 1373px) {
+    .order-container {
+        display       : flex;
+        flex-direction: column;
+
+        .order-left {
+            width: 100%;
+        }
+
+        .order-right {
+            width     : 100%;
+            box-sizing: border-box;
+            padding   : 20px;
+
+            .provisional {
+                display        : flex;
+                justify-content: space-between;
+            }
+
+            .total-cost {
+                display        : flex;
+                justify-content: space-between;
+                padding-bottom : 30px;
+            }
+
+            .btnBuyItem {
+                width        : 100%;
+                border-radius: 5px;
+            }
+        }
+    }
+}
+
+@media (max-width: 920px) {
+    .order-container {
+        .order-left {
+            .orderLeft-item {
+                .order-info {
+                    .order-maintext {
+                        width: 100px;
+                    }
+
+                    .order-quantity {
+                        width: 60px;
+                    }
+                }
+
+
+            }
+        }
+
+        .order-right {}
+    }
+}
+
+@media (max-width: 675px) {
+    .order-container {
+        .order-left {
+            .orderLeft-item {
+                .order-info {
+                    .order-img {
+                        width : 50px;
+                        height: 50px;
+                    }
+
+                    .order-price {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 450px) {
+    .order-container {
+        .order-left {
+            .orderLeft-item {
+                .order-total {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+
+@media (max-width: 385px) {
+    .order-container {
+        .order-left {
+            .orderLeft-item {
+                .order-quantity {
+                    display: none;
+                }
+            }
+        }
+    }
+}

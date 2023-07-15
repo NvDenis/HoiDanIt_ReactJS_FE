@@ -42,6 +42,12 @@ export const accountSlice = createSlice({
                 id: ""
             }
         },
+        doUpdateUserInfo: (state, action) => {
+            let data = action.payload;
+            state.user.fullName = data.fullName
+            state.user.phone = data.phone
+            state.user.avatar = data.newAvatar
+        }
 
     },
     // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -51,7 +57,7 @@ export const accountSlice = createSlice({
     },
 });
 
-export const { doLoginAction, doGetAccountAction, doLogoutAction } = accountSlice.actions;
+export const { doLoginAction, doGetAccountAction, doLogoutAction, doUpdateUserInfo } = accountSlice.actions;
 
 
 export default accountSlice.reducer;

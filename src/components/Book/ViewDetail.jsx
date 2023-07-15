@@ -21,7 +21,6 @@ const ViewDetail = (props) => {
   const { dataBook } = props;
 
   const images = dataBook?.images ?? [];
-  console.log('check databook', dataBook);
 
   const handleOnclickImage = () => {
     setIsShowModalGallery(true);
@@ -47,6 +46,7 @@ const ViewDetail = (props) => {
         className="view-detail-book"
         style={{ maxWidth: "1440px", margin: "0 auto" }}
       >
+        
         {dataBook && dataBook._id ? (
           <Row gutter={[20, 20]}>
             <Col md={10} sm={0} xs={0}>

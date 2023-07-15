@@ -31,9 +31,35 @@ export const orderSlice = createSlice({
       state.carts = carts;
       message.success('Thêm sản phẩm thành công!')
     },
+
+    doUpdateBookAction: (state, action) => {
+      let carts = state.carts;
+      let item = action.payload;
+
+      let itemIndex = carts.findIndex(c => c._id === item._id)
+
+      if (itemIndex > -1) {
+        carts[itemIndex].quantity = item.quantity
+      }
+      state.carts = carts;
+
+    },
+
+    doDeleteBookAction: (state, action) => {
+      let carts = state.carts;
+      let item = action.payload;
+
+      carts = carts.filter(c => c._id !== item._id)
+
+      state.carts = carts;
+    }
+    ,
+    doResetCartsAction: (state, action) => {
+      state.carts = [];
+    }
   },
 });
 
 export default orderSlice.reducer;
 
-export const { doAddBookAction } = orderSlice.actions;
+export const { doAddBookAction, doUpdateBookAction, doDeleteBookAction, doResetCartsAction } = orderSlice.actions;

@@ -1,9 +1,10 @@
 .popover-list {
     .popover-item {
-        display: flex;
+        display        : flex;
         justify-content: space-between;
-        align-items: center;
-        gap: 10px;
+        align-items    : center;
+        gap            : 10px;
+
         .popover-left {
 
             max-width  : 550px;
@@ -36,4 +37,22 @@
             color: rgb(238, 77, 45);
         }
     }
+}
+
+.btnPreviewCarts {
+    color     : #fff;
+    border    : 1px solid rgb(238, 77, 45);
+    background: rgb(238, 77, 45);
+    height    : 48px;
+    padding   : 0 20px;
+    cursor    : pointer;
+}
+
+.btnBuyItem {
+    color     : #fff;
+    border    : 1px solid rgb(238, 77, 45);
+    background: rgb(238, 77, 45);
+    height    : 48px;
+    padding   : 0 20px;
+    cursor    : pointer;
 }

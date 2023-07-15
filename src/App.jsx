@@ -19,6 +19,8 @@ import LayoutAdmin from "./components/Admin/LayoutAdmin";
 import "./styles/reset.scss";
 import TableUser from "./components/Admin/User/TableUser";
 import TableBook from "./components/Admin/Books/TableBook";
+import Order from "./pages/order/index";
+import History from './components/History/index'
 
 const Layout = () => {
   return (
@@ -65,6 +67,15 @@ export default function App() {
         {
           path: "book/:slug",
           element: <BookPage />,
+        },
+        {
+          path: "order",
+          element: <Order />,
+        },
+
+        {
+          path: "history",
+          element: <History />,
         },
       ],
     },
