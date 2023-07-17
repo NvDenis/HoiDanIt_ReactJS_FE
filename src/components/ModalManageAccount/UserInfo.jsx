@@ -17,7 +17,7 @@ const UserInfo = (props) => {
   const user = useSelector((state) => state.account.user);
 
   const onFinish = async (values) => {
-    const { email, phone, fullName } = values;
+    const {  phone, fullName } = values;
 
     const res = await callUpdateUserInfo(user.id, fullName, phone, newAvatar);
 

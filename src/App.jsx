@@ -21,6 +21,7 @@ import TableUser from "./components/Admin/User/TableUser";
 import TableBook from "./components/Admin/Books/TableBook";
 import Order from "./pages/order/index";
 import History from './components/History/index'
+import ManageOrder from "./components/Admin/Order/ManageOrder";
 
 const Layout = () => {
   return (
@@ -100,6 +101,10 @@ export default function App() {
         {
           path: "book",
           element: <TableBook />,
+        },
+        {
+          path: "order",
+          element: <ManageOrder />,
         },
       ],
     },
