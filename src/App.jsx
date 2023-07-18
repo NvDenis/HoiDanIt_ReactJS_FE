@@ -20,14 +20,16 @@ import "./styles/reset.scss";
 import TableUser from "./components/Admin/User/TableUser";
 import TableBook from "./components/Admin/Books/TableBook";
 import Order from "./pages/order/index";
-import History from './components/History/index'
+import History from "./components/History/index";
 import ManageOrder from "./components/Admin/Order/ManageOrder";
 
 const Layout = () => {
+  const [search, setSearch] = useState("");
+
   return (
     <div className="layout-app">
-      <Header />
-      <Outlet />
+      <Header setSearch={setSearch} search={search} />
+      <Outlet context={[search, setSearch]} />
       <Footer />
     </div>
   );
@@ -71,12 +73,20 @@ export default function App() {
         },
         {
           path: "order",
-          element: <Order />,
+          element: (
+            <ProtectedRoute>
+              <Order />
+            </ProtectedRoute>
+          ),
         },
 
         {
           path: "history",
-          element: <History />,
+          element: (
+            <ProtectedRoute>
+              <History />
+            </ProtectedRoute>
+          ),
         },
       ],
     },

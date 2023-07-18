@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaReact } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import { VscSearchFuzzy } from "react-icons/vsc";
@@ -14,7 +14,8 @@ import { Link } from "react-router-dom";
 import UserInfo from "../ModalManageAccount/UserInfo";
 import ManageAccount from "../ModalManageAccount/ManageAccount";
 
-const Header = () => {
+const Header = (props) => {
+  const { search, setSearch } = props;
   const [openDrawer, setOpenDrawer] = useState(false);
   const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
   const user = useSelector((state) => state.account.user);
@@ -123,6 +124,20 @@ const Header = () => {
     );
   };
 
+  const [size, setSize] = useState();
+
+  const handleTest = () => {
+    setSize(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleTest);
+
+    return () => {
+      window.removeEventListener("resize", handleTest);
+    };
+  }, []);
+
   return (
     <>
       <div className="header-container">
@@ -145,22 +160,35 @@ const Header = () => {
                 className="input-search"
                 type={"text"}
                 placeholder="Bạn tìm gì hôm nay"
+                onChange={(e) => setSearch(e.target.value)}
               />
             </div>
           </div>
 
           <nav className="page-header__bottom">
             <ul id="navigation" className="navigation">
-              <li className="navigation__item">
-                <Popover
-                  title={"Sản phẩm mới thêm"}
-                  content={renderContent}
-                  placement="bottomRight"
-                >
-                  <Badge count={cartsQuantity} showZero size={"small"}>
+              <li className="navigation__item" onClick={() => handleTest()}>
+                {size && size > 550 ? (
+                  <Popover
+                    title={"Sản phẩm mới thêm"}
+                    content={renderContent}
+                    placement="bottomRight"
+                    trigger={"click"}
+                  >
+                    <Badge count={cartsQuantity} showZero size={"small"}>
+                      <FiShoppingCart className="icon-cart" />
+                    </Badge>
+                  </Popover>
+                ) : (
+                  <Badge
+                    count={cartsQuantity}
+                    showZero
+                    size={"small"}
+                    onClick={() => navigate("order")}
+                  >
                     <FiShoppingCart className="icon-cart" />
                   </Badge>
-                </Popover>
+                )}
               </li>
               <li className="navigation__item mobile">
                 <Divider type="vertical" />

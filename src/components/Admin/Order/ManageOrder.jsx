@@ -15,8 +15,6 @@ const ManageOrder = (props) => {
     fetchListOrder();
   }, [current, pageSize]);
 
-  console.log("check list order ", listOrder);
-
   const fetchListOrder = async () => {
     let query = `current=${current}&pageSize=${pageSize}`;
 

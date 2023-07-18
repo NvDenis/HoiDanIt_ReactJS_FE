@@ -66,8 +66,6 @@ const TableUser = () => {
 
     let res = await callFetchListUser(query);
 
-    // console.log('check res', res);
-
     if (res && res.data) {
       setListUser(res.data.result);
       setTotal(res.data.meta.total);

@@ -15,8 +15,10 @@ import {
 import "./home.scss";
 import { callGetBookCategory, callGetListBook } from "../../services/api";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 const Home = () => {
+  const [search, setSearch] = useOutletContext();
+
   const [form] = Form.useForm();
   const [category, setCategory] = useState([]);
   const [current, setCurrent] = useState(1);
@@ -31,7 +33,7 @@ const Home = () => {
 
   useEffect(() => {
     getListBook();
-  }, [current, sortField, dataFilter]);
+  }, [current, sortField, dataFilter, search]);
   // get book
   const getListBook = async () => {
     setIsLoading(true);
@@ -46,8 +48,11 @@ const Home = () => {
       query += dataFilter;
     }
 
-    let res = await callGetListBook(query);
+    if (search) {
+      query += `&mainText=/${search}/i`;
+    }
 
+    let res = await callGetListBook(query);
     if (res?.data) {
       setListBook(res.data.result);
       setTotal(res.data.meta.total);
@@ -323,9 +328,7 @@ const Home = () => {
             }}
           >
             <div style={{ padding: "20px", backgroundColor: "#fff" }}>
-              <Row>
-                <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
-              </Row>
+              <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
               <Spin tip="Loading..." spinning={isLoading}>
                 <Row className="customize-row">
                   {listBook &&
