@@ -23,7 +23,7 @@ const { Content, Footer, Sider } = Layout;
 const items = [
   {
     label: <Link to="/admin">Dashboard</Link>,
-    key: "dashboard",
+    key: "/admin",
     icon: <AppstoreOutlined />,
   },
   {
@@ -33,24 +33,19 @@ const items = [
     children: [
       {
         label: <Link to="/admin/user">CRUD</Link>,
-        key: "crud",
-        icon: <TeamOutlined />,
-      },
-      {
-        label: "Files1",
-        key: "file1",
+        key: "/admin/user",
         icon: <TeamOutlined />,
       },
     ],
   },
   {
     label: <Link to="/admin/book">Manage Books</Link>,
-    key: "book",
+    key: "/admin/book",
     icon: <ExceptionOutlined />,
   },
   {
     label: <Link to="/admin/order">Manage Orders</Link>,
-    key: "order",
+    key: "/admin/order",
     icon: <DollarCircleOutlined />,
   },
 ];
@@ -71,6 +66,7 @@ const LayoutAdmin = () => {
       navigate("/");
     }
   };
+
 
   const itemsDropdown = [
     {
@@ -109,10 +105,12 @@ const LayoutAdmin = () => {
       >
         <div style={{ height: 32, margin: 16, textAlign: "center" }}>Admin</div>
         <Menu
-          defaultSelectedKeys={[activeMenu]}
+          selectedKeys={[location.pathname]}
           mode="inline"
           items={items}
-          onClick={(e) => setActiveMenu(e.key)}
+          onClick={(e) => {
+            setActiveMenu(e.key);
+          }}
         />
       </Sider>
       <Layout>
