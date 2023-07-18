@@ -124,20 +124,6 @@ const Header = (props) => {
     );
   };
 
-  const [size, setSize] = useState();
-
-  const handleTest = () => {
-    setSize(window.innerWidth);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", handleTest);
-
-    return () => {
-      window.removeEventListener("resize", handleTest);
-    };
-  }, []);
-
   return (
     <>
       <div className="header-container">
@@ -168,27 +154,16 @@ const Header = (props) => {
           <nav className="page-header__bottom">
             <ul id="navigation" className="navigation">
               <li className="navigation__item" onClick={() => handleTest()}>
-                {size && size > 550 ? (
-                  <Popover
-                    title={"Sản phẩm mới thêm"}
-                    content={renderContent}
-                    placement="bottomRight"
-                    trigger={"click"}
-                  >
-                    <Badge count={cartsQuantity} showZero size={"small"}>
-                      <FiShoppingCart className="icon-cart" />
-                    </Badge>
-                  </Popover>
-                ) : (
-                  <Badge
-                    count={cartsQuantity}
-                    showZero
-                    size={"small"}
-                    onClick={() => navigate("order")}
-                  >
+                <Popover
+                  title={"Sản phẩm mới thêm"}
+                  content={renderContent}
+                  placement="bottomRight"
+                  trigger={"click"}
+                >
+                  <Badge count={cartsQuantity} showZero size={"small"}>
                     <FiShoppingCart className="icon-cart" />
                   </Badge>
-                )}
+                </Popover>
               </li>
               <li className="navigation__item mobile">
                 <Divider type="vertical" />
