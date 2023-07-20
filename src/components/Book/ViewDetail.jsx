@@ -7,14 +7,16 @@ import { useState } from "react";
 import { useRef } from "react";
 import BookLoader from "./BookLoader";
 import { doAddBookAction } from "../../redux/order/orderSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const ViewDetail = (props) => {
   const refGallery = useRef(null);
   const [isShowModalGallery, setIsShowModalGallery] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -35,9 +37,13 @@ const ViewDetail = (props) => {
   };
 
   const handleAddToCart = (quantity, dataBook) => {
-    dispatch(
-      doAddBookAction({ quantity, detail: dataBook, _id: dataBook._id })
-    );
+    if (isAuthenticated) {
+      dispatch(
+        doAddBookAction({ quantity, detail: dataBook, _id: dataBook._id })
+      );
+    } else {
+      navigate("/login");
+    }
   };
 
   return (
@@ -46,7 +52,6 @@ const ViewDetail = (props) => {
         className="view-detail-book"
         style={{ maxWidth: "1440px", margin: "0 auto" }}
       >
-        
         {dataBook && dataBook._id ? (
           <Row gutter={[20, 20]}>
             <Col md={10} sm={0} xs={0}>
@@ -185,7 +190,7 @@ const ViewDetail = (props) => {
 
                     <span>Thêm Vào Giỏ Hàng</span>
                   </button>
-                  <button className="btn-right">Mua Ngay</button>
+                  <button className="btn-right" onClick={() => navigate('/order')}>Mua Ngay</button>
                 </div>
               </Col>
             </Col>

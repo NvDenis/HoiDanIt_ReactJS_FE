@@ -61,12 +61,13 @@ const LayoutAdmin = () => {
   const handleLogout = async () => {
     const res = await callLogout();
     if (res && res.data) {
+      dispatch(doResetCartsAction());
+
       dispatch(doLogoutAction());
       message.success("Đăng xuất thành công");
       navigate("/");
     }
   };
-
 
   const itemsDropdown = [
     {

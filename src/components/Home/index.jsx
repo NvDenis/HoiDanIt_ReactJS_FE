@@ -11,6 +11,7 @@ import {
   Tabs,
   Pagination,
   Spin,
+  Drawer,
 } from "antd";
 import "./home.scss";
 import { callGetBookCategory, callGetListBook } from "../../services/api";
@@ -28,6 +29,7 @@ const Home = () => {
   const [sortField, setSortField] = useState("&sort=-sold");
   const [isLoading, setIsLoading] = useState(false);
   const [total, setTotal] = useState(0);
+  const [isShowSliderFilter, setIsShowSliderFilter] = useState(false);
 
   const navigate = useNavigate();
 
@@ -329,6 +331,10 @@ const Home = () => {
           >
             <div style={{ padding: "20px", backgroundColor: "#fff" }}>
               <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+              <div className="filter" style={{ marginBottom: "10px" }}>
+                <FilterTwoTone onClick={() => setIsShowSliderFilter(true)} />{" "}
+                Lọc
+              </div>
               <Spin tip="Loading..." spinning={isLoading}>
                 <Row className="customize-row">
                   {listBook &&
@@ -389,6 +395,140 @@ const Home = () => {
           </Col>
         </Row>
       </div>
+
+      <Drawer
+        title="Lọc sản phẩm"
+        placement="right"
+        onClose={() => setIsShowSliderFilter(false)}
+        open={isShowSliderFilter}
+      >
+        <div style={{ padding: "20px", backgroundColor: "#fff" }}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <span style={{ fontWeight: "medium" }}>
+              <FilterTwoTone /> Bộ lọc tìm kiếm
+            </span>
+            <ReloadOutlined
+              title="Reset"
+              onClick={() => {
+                form.resetFields();
+                setDataFilter("");
+              }}
+            />
+          </div>
+          <Divider />
+          <Form
+            onFinish={onFinish}
+            form={form}
+            onValuesChange={(changedValues, values) =>
+              handleChangeFilter(changedValues, values)
+            }
+          >
+            <Form.Item
+              name="category"
+              label="Danh mục sản phẩm"
+              labelCol={{ span: 24 }}
+            >
+              <Checkbox.Group>
+                <Row>
+                  {category &&
+                    category.length > 0 &&
+                    category.map((item) => {
+                      return (
+                        <Col span={24} key={item} style={{ padding: "7px 0" }}>
+                          <Checkbox value={item}>{item}</Checkbox>
+                        </Col>
+                      );
+                    })}
+                </Row>
+              </Checkbox.Group>
+            </Form.Item>
+            <Divider />
+            <Form.Item label="Khoảng giá" labelCol={{ span: 24 }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: 20,
+                }}
+              >
+                <Form.Item name={["range", "from"]}>
+                  <InputNumber
+                    name="from"
+                    min={0}
+                    placeholder="đ TỪ"
+                    formatter={(value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
+                  />
+                </Form.Item>
+                <span>-</span>
+                <Form.Item name={["range", "to"]}>
+                  <InputNumber
+                    name="to"
+                    min={0}
+                    placeholder="đ ĐẾN"
+                    formatter={(value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
+                  />
+                </Form.Item>
+              </div>
+              <div>
+                <Button
+                  onClick={() => form.submit()}
+                  style={{ width: "100%" }}
+                  type="primary"
+                >
+                  Áp dụng
+                </Button>
+              </div>
+            </Form.Item>
+            <Divider />
+            <Form.Item label="Đánh giá" labelCol={{ span: 24 }}>
+              <div>
+                <Rate
+                  value={5}
+                  disabled
+                  style={{ color: "#ffce3d", fontSize: 15 }}
+                />
+                <span className="ant-rate-text"></span>
+              </div>
+              <div>
+                <Rate
+                  value={4}
+                  disabled
+                  style={{ color: "#ffce3d", fontSize: 15 }}
+                />
+                <span className="ant-rate-text">trở lên</span>
+              </div>
+              <div>
+                <Rate
+                  value={3}
+                  disabled
+                  style={{ color: "#ffce3d", fontSize: 15 }}
+                />
+                <span className="ant-rate-text">trở lên</span>
+              </div>
+              <div>
+                <Rate
+                  value={2}
+                  disabled
+                  style={{ color: "#ffce3d", fontSize: 15 }}
+                />
+                <span className="ant-rate-text">trở lên</span>
+              </div>
+              <div>
+                <Rate
+                  value={1}
+                  disabled
+                  style={{ color: "#ffce3d", fontSize: 15 }}
+                />
+                <span className="ant-rate-text">trở lên</span>
+              </div>
+            </Form.Item>
+          </Form>
+        </div>
+      </Drawer>
     </div>
   );
 };

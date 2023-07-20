@@ -23,6 +23,7 @@ export const accountSlice = createSlice({
             state.isAuthenticated = true;
             state.isLoading = false;
             state.user = action.payload;
+            
         },
         doGetAccountAction: (state, action) => {
 

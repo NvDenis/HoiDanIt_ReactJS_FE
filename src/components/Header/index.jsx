@@ -4,7 +4,7 @@ import { FiShoppingCart } from "react-icons/fi";
 import { VscSearchFuzzy } from "react-icons/vsc";
 import { Divider, Badge, Drawer, message, Avatar, Popover } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { DownOutlined } from "@ant-design/icons";
+import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
 import { useNavigate } from "react-router";
 import { callLogout } from "../../services/api";
@@ -13,6 +13,7 @@ import { doLogoutAction } from "../../redux/account/accountSlice";
 import { Link } from "react-router-dom";
 import UserInfo from "../ModalManageAccount/UserInfo";
 import ManageAccount from "../ModalManageAccount/ManageAccount";
+import { doResetCartsAction } from "../../redux/order/orderSlice";
 
 const Header = (props) => {
   const { search, setSearch } = props;
@@ -29,6 +30,7 @@ const Header = (props) => {
   const handleLogout = async () => {
     const res = await callLogout();
     if (res && res.data) {
+      dispatch(doResetCartsAction());
       dispatch(doLogoutAction());
       message.success("Đăng xuất thành công");
       navigate("/");
@@ -36,6 +38,14 @@ const Header = (props) => {
   };
 
   let items = [
+    {
+      label: (
+        <label style={{ cursor: "pointer" }} onClick={() => navigate("/")}>
+          Trang chủ
+        </label>
+      ),
+      key: "trang chủ",
+    },
     {
       label: (
         <label
@@ -124,6 +134,30 @@ const Header = (props) => {
     );
   };
 
+  const handleWindowResize = () => {
+    setWindowWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleWindowResize);
+
+    return () => {
+      window.removeEventListener("resize", handleWindowResize);
+    };
+  }, []);
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isShowPopover, setIsShowPopover] = useState(true);
+  const handlePopoverClick = () => {
+    if (windowWidth > 1060) {
+      // Nếu kích thước màn hình lớn hơn 1060px, hiển thị Popover
+      // Do bạn sử dụng trigger={"click"}, Popover sẽ tự động hiện ra khi người dùng click vào Icon Cart
+    } else {
+      setIsShowPopover(false);
+      navigate("order");
+    }
+  };
+
   return (
     <>
       <div className="header-container">
@@ -138,7 +172,7 @@ const Header = (props) => {
               ☰
             </div>
             <div className="page-header__logo">
-              <span className="logo">
+              <span className="logo" onClick={() => navigate("/")}>
                 <FaReact className="rotate icon-react" /> Hỏi Dân IT
                 <VscSearchFuzzy className="icon-search" />
               </span>
@@ -153,29 +187,54 @@ const Header = (props) => {
 
           <nav className="page-header__bottom">
             <ul id="navigation" className="navigation">
-              <li className="navigation__item" onClick={() => handleTest()}>
-                <Popover
-                  title={"Sản phẩm mới thêm"}
-                  content={renderContent}
-                  placement="bottomRight"
-                  trigger={"click"}
-                >
-                  <Badge count={cartsQuantity} showZero size={"small"}>
+              <li className="navigation__item">
+                {cartsQuantity > 0 ? (
+                  windowWidth > 1060 ? (
+                    <Popover
+                      title={"Sản phẩm mới thêm"}
+                      content={renderContent}
+                      placement="bottomRight"
+                      trigger={"hover"}
+                      onClick={handlePopoverClick}
+                    >
+                      <Badge count={cartsQuantity} showZero size={"small"}>
+                        <FiShoppingCart className="icon-cart" />
+                      </Badge>
+                    </Popover>
+                  ) : (
+                    <Badge
+                      count={cartsQuantity}
+                      showZero
+                      size={"small"}
+                      onClick={() => navigate("order")}
+                    >
+                      <FiShoppingCart className="icon-cart" />
+                    </Badge>
+                  )
+                ) : (
+                  <Badge
+                    count={cartsQuantity}
+                    showZero
+                    size={"small"}
+                    onClick={() => navigate("/")}
+                  >
                     <FiShoppingCart className="icon-cart" />
                   </Badge>
-                </Popover>
+                )}
               </li>
-              <li className="navigation__item mobile">
-                <Divider type="vertical" />
-              </li>
-              <li className="navigation__item mobile">
+
+              <li className="navigation__item">
                 {!isAuthenticated ? (
-                  <span onClick={() => navigate("/login")}> Tài Khoản</span>
+                  <Avatar
+                    onClick={() => navigate("/login")}
+                    size={32}
+                    icon={<UserOutlined />}
+                  />
                 ) : (
                   <Dropdown menu={{ items }} trigger={["click"]}>
-                    <Space>
+                    <Space className="account">
                       <Avatar src={urlAvater} />
-                      {user?.fullName}
+                      <span className="name-account">{user?.fullName}</span>
                     </Space>
                   </Dropdown>
                 )}
@@ -190,11 +249,33 @@ const Header = (props) => {
         onClose={() => setOpenDrawer(false)}
         open={openDrawer}
       >
-        <p>Quản lý tài khoản</p>
-        <Divider />
-
-        <p>Đăng xuất</p>
-        <Divider />
+        {isAuthenticated && (
+          <div>
+            {user?.role === "ADMIN" && (
+              <>
+                <span onClick={() => navigate("/admin")}>Trang quản trị</span>
+                <Divider />
+              </>
+            )}
+            <label
+              style={{ cursor: "pointer" }}
+              onClick={() => setIsShowModalManageAccount(true)}
+            >
+              Quản lý tài khoản
+            </label>
+            <Divider />
+            <label
+              style={{ cursor: "pointer" }}
+              onClick={() => navigate("/history")}
+            >
+              Lịch sử mua hàng
+            </label>
+            <Divider />
+            <label style={{ cursor: "pointer" }} onClick={() => handleLogout()}>
+              Đăng xuất
+            </label>
+          </div>
+        )}
       </Drawer>
 
       <ManageAccount

@@ -94,7 +94,6 @@ const index = (props) => {
                 carts.map((item) => {
                   return (
                     <div className="orderLeft-item" key={item._id}>
-                      <div className="order-info">
                         <div className="order-img">
                           <img
                             src={`${
@@ -104,6 +103,8 @@ const index = (props) => {
                             className="img"
                           />
                         </div>
+
+                      <span className="order-info">
                         <div className="order-maintext">
                           {item.detail.mainText}
                         </div>
@@ -122,7 +123,7 @@ const index = (props) => {
                           min={1}
                           max={item.detail.quantity}
                         />
-                      </div>
+                      </span>
 
                       <div className="order-total">
                         Tổng:
