@@ -257,6 +257,17 @@ const Header = (props) => {
                 <Divider />
               </>
             )}
+
+            <label
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                navigate("/");
+                setOpenDrawer(false);
+              }}
+            >
+              Trang chủ
+            </label>
+            <Divider />
             <label
               style={{ cursor: "pointer" }}
               onClick={() => setIsShowModalManageAccount(true)}
@@ -266,7 +277,10 @@ const Header = (props) => {
             <Divider />
             <label
               style={{ cursor: "pointer" }}
-              onClick={() => navigate("/history")}
+              onClick={() => {
+                navigate("/history");
+                setOpenDrawer(false);
+              }}
             >
               Lịch sử mua hàng
             </label>

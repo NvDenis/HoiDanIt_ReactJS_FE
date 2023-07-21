@@ -94,7 +94,6 @@ const index = (props) => {
                 carts.map((item) => {
                   return (
                     <div className="orderLeft-item" key={item._id}>
-
                       <div className="order-img">
                         <img
                           src={`${
@@ -105,36 +104,37 @@ const index = (props) => {
                         />
                       </div>
 
-                      <div className="order-maintext">
-                        {item.detail.mainText}
-                      </div>
+                      <div className="order-info">
+                        <div className="order-maintext">
+                          {item.detail.mainText}
+                        </div>
 
-                      <p className="order-price">
-                        {new Intl.NumberFormat("vi-VN", {
-                          style: "currency",
-                          currency: "VND",
-                        }).format(item.detail.price)}
-                      </p>
-
-                      <InputNumber
-                      
-                        defaultValue={item.quantity}
-                        className="order-quantity"
-                        onChange={(value) =>
-                          handeChangeQuantity(item._id, value)
-                        }
-                        min={1}
-                        max={item.detail.quantity}
-                      />
-
-                      <div className="order-total">
-                        Tổng:
-                        <span>
+                        <p className="order-price">
                           {new Intl.NumberFormat("vi-VN", {
                             style: "currency",
                             currency: "VND",
-                          }).format(item.quantity * item.detail.price)}
-                        </span>
+                          }).format(item.detail.price)}
+                        </p>
+
+                        <InputNumber
+                          defaultValue={item.quantity}
+                          className="order-quantity"
+                          onChange={(value) =>
+                            handeChangeQuantity(item._id, value)
+                          }
+                          min={1}
+                          max={item.detail.quantity}
+                        />
+
+                        <div className="order-total">
+                          Tổng:
+                          <span>
+                            {new Intl.NumberFormat("vi-VN", {
+                              style: "currency",
+                              currency: "VND",
+                            }).format(item.quantity * item.detail.price)}
+                          </span>
+                        </div>
                       </div>
 
                       <div

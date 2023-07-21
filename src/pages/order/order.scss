@@ -28,7 +28,6 @@
                 padding         : 20px;
                 align-items     : center;
                 border-radius   : 5px;
-                justify-content : space-between;
 
                 .order-img {
                     display        : flex;
@@ -45,17 +44,19 @@
                     }
                 }
 
-                .order-maintext {
-                    width: 30%;
+                .order-info {
+                    width  : 85%;
+                    display: flex;
+                    gap    : 20px;
+
+                    .order-maintext {
+                        width: 30%;
+                    }
                 }
 
-                .order-price {}
-
-                .order-quantity {}
-
-                .order-total {}
-
                 .order-delete {}
+
+
             }
         }
 
@@ -107,6 +108,13 @@
 
             .order-left {
                 width: 100%;
+
+                .orderLeft-item {
+                    .order-info {
+                        display: flex;
+                        gap    : 25px;
+                    }
+                }
             }
 
             .order-right {
@@ -135,12 +143,23 @@
                 width: 100%;
 
                 .orderLeft-item {
-                    .order-quantity {
-                        width: 10%;
-                    }
 
-                    .order-price {
-                        display: none;
+                    .order-info {
+                        display       : flex;
+                        flex-direction: column;
+                        gap           : 10px;
+
+                        .order-maintext {
+                            width: 100%;
+                        }
+
+                        .order-quantity {
+                            width: 30%;
+                        }
+
+                        .order-price {
+                            display: none;
+                        }
                     }
                 }
 
