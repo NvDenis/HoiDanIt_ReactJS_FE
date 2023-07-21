@@ -1,4 +1,51 @@
 .history-container {
-    padding         : 20px 50px;
+    padding         : 20px;
     background-color: #efefef;
+
+    .history-list {
+        display: none;
+    }
+}
+
+@media (max-width: 740px) {
+    .history-container {
+        .history-table {
+            display: none;
+        }
+
+        .history-list {
+
+            display       : flex;
+            flex-direction: column;
+            gap           : 20px;
+
+            .history-item {
+
+                .history-info {
+                    display    : flex;
+                    gap        : 20px;
+                    align-items: center;
+
+                    .history-img {
+                        width: 200px;
+
+                        .img {
+                            width : 100%;
+                            height: auto;
+                        }
+
+                    }
+
+                    .history-maintext {
+                        width: 30%;
+                    }
+
+                    .history-price {
+                        width: 10%;
+                    }
+                }
+            }
+        }
+    }
+
 }

@@ -233,7 +233,7 @@ const Header = (props) => {
                 ) : (
                   <Dropdown menu={{ items }} trigger={["click"]}>
                     <Space className="account">
-                      <Avatar src={urlAvater} />
+                      <Avatar src={urlAvater} className="avatar" />
                       <span className="name-account">{user?.fullName}</span>
                     </Space>
                   </Dropdown>

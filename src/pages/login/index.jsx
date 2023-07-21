@@ -5,6 +5,7 @@ import "./login.scss";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { doLoginAction } from "../../redux/account/accountSlice";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -40,6 +41,17 @@ const LoginPage = () => {
         <div className="container">
           <section className="wrapper">
             <div className="heading">
+              <span
+                style={{
+                  color: "#1677ff",
+                  padding: "10px 0px",
+                  display: "block",
+                  cursor: 'pointer'
+                }}
+                onClick={() => navigate('/')}
+              >
+                <ArrowLeftOutlined /> Quay lại
+              </span>
               <h2 className="text text-large">Đăng Nhập</h2>
               <Divider />
             </div>

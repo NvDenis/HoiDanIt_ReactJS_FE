@@ -94,36 +94,38 @@ const index = (props) => {
                 carts.map((item) => {
                   return (
                     <div className="orderLeft-item" key={item._id}>
-                        <div className="order-img">
-                          <img
-                            src={`${
-                              import.meta.env.VITE_BACKEND_URL
-                            }/images/book/${item.detail.thumbnail}`}
-                            alt=""
-                            className="img"
-                          />
-                        </div>
 
-                      <span className="order-info">
-                        <div className="order-maintext">
-                          {item.detail.mainText}
-                        </div>
-                        <p className="order-price">
-                          {new Intl.NumberFormat("vi-VN", {
-                            style: "currency",
-                            currency: "VND",
-                          }).format(item.detail.price)}
-                        </p>
-                        <InputNumber
-                          defaultValue={item.quantity}
-                          className="order-quantity"
-                          onChange={(value) =>
-                            handeChangeQuantity(item._id, value)
-                          }
-                          min={1}
-                          max={item.detail.quantity}
+                      <div className="order-img">
+                        <img
+                          src={`${
+                            import.meta.env.VITE_BACKEND_URL
+                          }/images/book/${item.detail.thumbnail}`}
+                          alt=""
+                          className="img"
                         />
-                      </span>
+                      </div>
+
+                      <div className="order-maintext">
+                        {item.detail.mainText}
+                      </div>
+
+                      <p className="order-price">
+                        {new Intl.NumberFormat("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        }).format(item.detail.price)}
+                      </p>
+
+                      <InputNumber
+                      
+                        defaultValue={item.quantity}
+                        className="order-quantity"
+                        onChange={(value) =>
+                          handeChangeQuantity(item._id, value)
+                        }
+                        min={1}
+                        max={item.detail.quantity}
+                      />
 
                       <div className="order-total">
                         Tổng:
@@ -189,7 +191,7 @@ const index = (props) => {
 
           {currentPage === 3 && (
             <Result
-              style={{ width: "100vw" }}
+              style={{ width: "100%" }}
               icon={<SmileOutlined />}
               title="Đơn hàng đã được đặt thành công!"
               extra={

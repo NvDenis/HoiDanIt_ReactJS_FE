@@ -1,4 +1,4 @@
-import { Row, Table, Tag } from "antd";
+import { Card, Row, Table, Tag } from "antd";
 import "./history.scss";
 import { callGetHistoryOrder } from "../../services/api";
 import { useEffect, useState } from "react";
@@ -8,7 +8,8 @@ import ReactJson from "react-json-view";
 const index = (props) => {
   const [dataHistory, setDataHistory] = useState();
 
-  console.log("check dataHistory ", dataHistory);
+  console.log("check data history ", dataHistory);
+
   const FecthHistoryOrder = async () => {
     const res = await callGetHistoryOrder();
 
@@ -45,33 +46,6 @@ const index = (props) => {
     },
   ];
 
-  //   const data = [
-  //     {
-  //       key: "1",
-  //       name: "John Brown",
-  //       borrow: 10,
-  //       repayment: 33,
-  //     },
-  //     {
-  //       key: "2",
-  //       name: "Jim Green",
-  //       borrow: 100,
-  //       repayment: 0,
-  //     },
-  //     {
-  //       key: "3",
-  //       name: "Joe Black",
-  //       borrow: 10,
-  //       repayment: 10,
-  //     },
-  //     {
-  //       key: "4",
-  //       name: "Jim Red",
-  //       borrow: 75,
-  //       repayment: 45,
-  //     },
-  //   ];
-
   const data = [];
   dataHistory?.map((item, index) => {
     data.push({
@@ -97,15 +71,47 @@ const index = (props) => {
   return (
     <div className="history-container">
       <div style={{ padding: "10px 0" }}>Lịch sử đặt hàng</div>
-      <Row>
-        <Table
-          columns={columns}
-          dataSource={data}
-          pagination={false}
-          bordered
-          style={{ width: "100vw" }}
-        />
-      </Row>
+      <div className="history-table">
+        <Row>
+          <Table
+            columns={columns}
+            dataSource={data}
+            pagination={false}
+            bordered
+            style={{ width: "100vw" }}
+          />
+        </Row>
+      </div>
+
+      <div className="history-list">
+        {dataHistory &&
+          dataHistory.length > 0 &&
+          dataHistory.map((item) => {
+            return (
+              <div className="history-item" key={item._id}>
+                <Card bordered={false}>
+                  <div className="history-info">
+                    <div className="history-img">
+                      <img
+                        src="https://picsum.photos/id/1018/1000/600/"
+                        alt=""
+                        className="img"
+                      />
+                    </div>
+                    <p className="history-maintext">
+                      {item.detail[0].bookName}
+                    </p>
+                    <p className="history-price">300k</p>
+                    <div className="history-quantity">
+                      x{item.detail[0].quantity}
+                    </div>
+                  </div>
+                </Card>
+              </div>
+            );
+          })}
+        ;
+      </div>
     </div>
   );
 };
